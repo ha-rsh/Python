@@ -1,5 +1,7 @@
+from os import link
 from sys import stdin
-from tkinter import N
+from turtle import position
+from types import NoneType
 
 from soupsieve import select
 
@@ -19,20 +21,22 @@ class LinkedList:
 
     def insert_at_the_beginning(self, data):
         newnode = Node(data)
-        newnode.next = self.head
+        if self.head is None:
+            self.head = self.tail = newnode
+            return
+
+        temp = self.head
         self.head = newnode
+        self.head.next = temp
 
     def insert_at_the_end(self, data):
         newnode = Node(data)
         if self.head is None:
-            self.head = newnode
+            self.head = self.tail = newnode
             return
 
-        temp = self.head
-        while temp.next:
-            temp = temp.next
-
-        temp.next = newnode
+        self.tail.next = newnode
+        self.tail = newnode
 
     def insert_at_specific_position(self, data, length):
         temp = self.head
@@ -50,7 +54,44 @@ class LinkedList:
         newnode.next = temp.next
         temp.next = newnode
 
+    def delete_from_the_beginning(self):
+        if self.head is None:
+            print("Linked list is empty")
 
+        elif self.head != self.tail:
+            self.head = self.head.next
+            return
+
+        self.head = self.tail = None
+
+    def delete_from_the_end(self, length):
+        if self.head is None:
+            print("Linked list is empty")
+
+        temp = self.head   
+        if self.head != self.tail:
+            while temp.next != self.tail:
+                temp = temp.next
+
+            self.tail = temp
+            self.tail.next = None
+
+    def delete_from_specific_position(self, length):
+        if self.head is None:
+            print("Linked list is empty")
+
+        i = 1
+        temp = self.head
+        print("Enter the position:", end=" ")
+        position = int(input())
+        while i < position - 1:
+            temp = temp.next
+            nextnode = temp.next
+            i += 1
+
+        temp.next = nextnode.next
+        nextnode = None
+            
     def len(self):
         temp = self.head
         count = 0
@@ -86,7 +127,7 @@ class LinkedList:
         print("Linked list is as follows: ", *elements)
 
 
-insert_data = LinkedList()
+linked_data = LinkedList()
 while True:
     print()
     print("********************MAIN MENU**********************")
@@ -94,7 +135,10 @@ while True:
     print("1. Insert at the beginning")
     print("2. Insert at the end")
     print("3. Insert at the specific position")
-    print("4. Reverse linked list")
+    print("4. Delete from the beginning")
+    print("5. Delete from the end")
+    print("6. Delete from the specific position")
+    print("7. Reverse linked list")
     print()
     print("Enter your choice: ", end=" ")
     choice = int(input())
@@ -104,33 +148,55 @@ while True:
             data = int(input())
 
             # INSERT NODE AT THE BEGINNING
-            if choice == 1: insert_data.insert_at_the_beginning(data)
+            if choice == 1: linked_data.insert_at_the_beginning(data)
 
             # INSERT NODE AT THE END
-            elif choice == 2: insert_data.insert_at_the_end(data)
+            elif choice == 2: linked_data.insert_at_the_end(data)
 
             # INSERT AT SPECIFIC POSITION
-            elif choice == 3: insert_data.insert_at_specific_position(data, insert_data.len())
+            elif choice == 3: linked_data.insert_at_specific_position(linked_data, linked_data.len())
 
             print("want to insert more data? :", end=" ")
             make_choice = input()
             if make_choice in ["y", "Y"]: continue
             
             else:
-                insert_data.display()
+                linked_data.display()
             
                 # LENGTH OF LINKED LIST
-                length = insert_data.len()
+                length = linked_data.len()
                 print(f"Length of linked list: {length}")
                 print()
                 break
 
         else:
-            insert_data.reverse()
-            insert_data.display()
-            print()
-            break
-        
+            # DELETE FROM THE BEGINNING
+            if choice == 4: linked_data.delete_from_the_beginning()
+
+            # DELETE FROM THE END
+            elif choice == 5: linked_data.delete_from_the_end(linked_data.len())
+
+            # DELETE FROM SPECIFIC POSITION
+            elif choice == 6: linked_data.delete_from_specific_position(linked_data.len())
+            
+            # REVERSE THE LINKED LIST
+            elif choice == 7: 
+                linked_data.reverse()
+                linked_data.display()
+                break
+    
+            print("want to delete more data? :", end=" ")
+            make_choice = input()
+            if make_choice in ["y", "Y"]: continue
+            else:
+                linked_data.display()
+            
+                # LENGTH OF LINKED LIST
+                length = linked_data.len()
+                print(f"Length of linked list: {length}")
+                print()
+                break
+
     print("want to continue or exit(y/n): ", end=" ")
     c = input()
     if c in ["y", "Y"]: continue
