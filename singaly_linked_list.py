@@ -40,9 +40,8 @@ class LinkedList:
         position = int(input())
         if position < 0 or position > length:
             print("Invalid position")
-            return
 
-        while i < position-1:
+        while i < position - 1:
             i += 1
             temp = temp.next
 
@@ -150,7 +149,7 @@ while True:
             elif choice == 2: linked_data.insert_at_the_end(data)
 
             # INSERT AT SPECIFIC POSITION
-            elif choice == 3: linked_data.insert_at_specific_position(data, linked_data.len())
+            elif choice == 3: linked_data.insert_at_specific_position(linked_data, linked_data.len())
 
             print("want to insert more data? :", end=" ")
             make_choice = input()
